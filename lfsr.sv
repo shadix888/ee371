@@ -1,0 +1,79 @@
+module lfsr (clk, reset, out);
+	input logic clk, reset;
+	output logic [1:0] out;
+	logic stage0, stage1, stage2, stage3, stage4, stage5;
+	
+	always_ff @(posedge clk) begin
+		if (!reset) begin
+			stage5 <= stage4;
+			stage4 <= stage3;
+			stage3 <= stage2;
+			stage2 <= stage1;
+			stage1 <= stage0;
+			stage0 <= !(stage3 ^ stage5);
+		end else begin
+			stage5 <= 0;
+			stage4 <= 0;
+			stage3 <= 0;
+			stage2 <= 0;
+			stage1 <= 0;
+			stage0 <= 0;
+		end
+	end
+	
+	assign out = {stage1, stage0};
+endmodule
+
+module lfsr_testbench();
+	logic clk, reset;
+	logic [1:0] out;
+	
+	lfsr dut (.clk, .reset, .out);
+	
+	initial begin
+		clk <= 0;
+		forever #5 clk <= ~clk;
+	end
+	
+	initial begin
+		reset = 1;	@(posedge clk);
+		reset = 0;	@(posedge clk);
+		@(posedge clk);
+		@(posedge clk);
+		@(posedge clk);
+		@(posedge clk);
+		@(posedge clk);
+		@(posedge clk);
+		@(posedge clk);
+		@(posedge clk);
+		@(posedge clk);
+		@(posedge clk);
+		@(posedge clk);
+		@(posedge clk);
+		@(posedge clk);
+		@(posedge clk);
+		@(posedge clk);
+		@(posedge clk);
+		@(posedge clk);
+		@(posedge clk);
+		@(posedge clk);
+		@(posedge clk);
+		@(posedge clk);
+		@(posedge clk);
+		@(posedge clk);
+		@(posedge clk);
+		@(posedge clk);
+		@(posedge clk);
+		@(posedge clk);
+		@(posedge clk);
+		@(posedge clk);
+		@(posedge clk);
+		@(posedge clk);
+		@(posedge clk);
+		@(posedge clk);
+		@(posedge clk);
+		@(posedge clk);
+		@(posedge clk);
+		$stop;
+	end
+endmodule
